@@ -2,9 +2,15 @@ from flask import Flask, request, abort, jsonify
 from flask_restful import Resource, Api, reqparse
 from api.menu import Menu
 
-app = Flask(__name__)
+from flasgger import Swagger, swag_from
 
+
+app = Flask(__name__)
 api = Api(app)
+swagger = Swagger(app, template={"info":{
+    "title":"Fast Food API",
+    "description":"Developed by Debs"
+}})
 
 menu = Menu()
 
@@ -12,7 +18,8 @@ class Welcome(Resource):
     def get(self):
         return 'welcome to my sunny days'
 
-class Menu(Resource):
+class Menus(Resource):
+    @swag_from('../Docs/add_item.yml', methods=['POST'])
     def post(self):
         return menu.create_menu()
 
@@ -74,4 +81,4 @@ class Menu(Resource):
     #     row = self.database.cursor.fetchone()
     #     return row
 api.add_resource(Welcome, '/')
-api.add_resource(Menu, '/api/v1/menu')
+api.add_resource(Menus, '/api/v1/menu')
