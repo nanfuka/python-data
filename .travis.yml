@@ -7,7 +7,7 @@ install:
   - psql -c 'create database foodlove;' -U postgres
 # command to run tests
 script:
-  - pytest tests --cov=api --cov-report term-missing
+  - pytest --cov
 
 after_success:
   - coveralls
